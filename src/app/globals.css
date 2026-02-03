@@ -4,15 +4,19 @@
 
 @layer base {
   :root {
+    /* System font stack (no network at build); use next/font if you prefer Inter from Google */
+    --font-inter: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    /* Primary: blue-600 (operations) */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: #20719A (QTS operations) */
+    --primary: 199 66% 36%;
+    --primary-foreground: 0 0% 100%;
+    /* Primary at 10% opacity for nav highlight background */
+    --primary-highlight: 199 66% 36% / 0.1;
     /* Secondary: slate-700 */
     --secondary: 215.3 25% 26.7%;
     --secondary-foreground: 210 40% 98%;
@@ -29,7 +33,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 199 66% 36%;
     --radius: 0.5rem;
   }
 
@@ -40,8 +44,8 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 199 66% 45%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -54,7 +58,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 199 66% 45%;
   }
 }
 
@@ -148,4 +152,18 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+@keyframes gantt-now-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-gantt-now-pulse {
+  animation: gantt-now-pulse 2s ease-in-out infinite;
 }

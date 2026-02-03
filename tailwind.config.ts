@@ -21,6 +21,8 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          /** #20719A at 10% opacity for nav highlight background */
+          highlight: "hsl(var(--primary) / 0.1)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
