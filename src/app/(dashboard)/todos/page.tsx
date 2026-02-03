@@ -11,6 +11,7 @@ import {
   Check,
   Server,
 } from "lucide-react";
+import { TaskDetailDrawer } from "@/components/features/tasks/task-detail-drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -511,6 +512,7 @@ export default function TodosPage() {
   );
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [hoveredTaskId, setHoveredTaskId] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<DisplayMode>("all");
   const [filterType, setFilterType] = useState<string>("All Types");
@@ -641,6 +643,11 @@ export default function TodosPage() {
         ?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
   }, [selectedTaskId]);
+
+  const handleTaskSelect = useCallback((id: string) => {
+    setSelectedTaskId(id);
+    setIsDrawerOpen(true);
+  }, []);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-gray-50">
@@ -782,7 +789,7 @@ export default function TodosPage() {
                       isSelected={selectedTaskId === task.id}
                       completed={task.completed}
                       onToggle={toggleComplete}
-                      onSelect={setSelectedTaskId}
+                      onSelect={handleTaskSelect}
                       onHover={setHoveredTaskId}
                     />
                   ))}
@@ -798,7 +805,7 @@ export default function TodosPage() {
                       isSelected={selectedTaskId === task.id}
                       completed={task.completed}
                       onToggle={toggleComplete}
-                      onSelect={setSelectedTaskId}
+                      onSelect={handleTaskSelect}
                       onHover={setHoveredTaskId}
                     />
                   ))}
@@ -942,7 +949,7 @@ export default function TodosPage() {
                 dragPreviewLeft={
                   draggingTaskId === task.id ? dragPreviewLeft : null
                 }
-                onClick={() => setSelectedTaskId(task.id)}
+                onClick={() => handleTaskSelect(task.id)}
                 onHover={(hovered) =>
                   setHoveredTaskId(hovered ? task.id : null)
                 }
@@ -952,6 +959,12 @@ export default function TodosPage() {
           </div>
         </main>
       </div>
+
+      <TaskDetailDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        taskId={selectedTaskId}
+      />
     </div>
   );
 }
