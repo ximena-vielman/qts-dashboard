@@ -270,8 +270,6 @@ export function TaskDetailDrawer({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen, handleClose]);
 
-  const handleBackdropClick = () => handleClose();
-
   const handleAssign = () => {
     setIsAssigned(true);
   };
@@ -288,22 +286,9 @@ export function TaskDetailDrawer({
   if (!isOpen && !isExiting) return null;
 
   const drawerVisible = isOpen && !isExiting;
-  const backdropVisible = isOpen && !isExiting;
 
   return (
     <>
-      {/* Backdrop */}
-      <div
-        role="presentation"
-        onClick={handleBackdropClick}
-        className={cn(
-          "fixed inset-y-0 left-0 z-[999] bg-black/40 transition-opacity duration-300",
-          backdropVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-        style={{ width: "25vw" }}
-        aria-hidden
-      />
-
       {/* Drawer panel */}
       <div
         ref={drawerRef}

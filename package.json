@@ -35,7 +35,6 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@next/swc-darwin-arm64": "15.5.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

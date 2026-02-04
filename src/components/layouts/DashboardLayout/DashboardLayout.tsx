@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { useNavigationStore } from "@/hooks/use-navigation";
 import { Header } from "@/components/layouts/header";
 import { MainNav } from "@/components/layouts/main-nav";
 import { SecondaryNav } from "@/components/layouts/secondary-nav";
-import { navigationTree } from "@/components/layouts/secondary-nav";
+import { linkIdToPath, navigationTree } from "@/components/layouts/secondary-nav";
 import { cn } from "@/lib/utils";
 
 /** Default locations for the header location selector */
@@ -61,8 +61,9 @@ export function DashboardLayout({
   }, [isNavExpanded, secondaryWidth]);
 
   const pathname = usePathname();
+  const router = useRouter();
 
-  /** Sync secondary nav selection from URL (e.g. after "View all" → /todos) */
+  /** Sync secondary nav selection from URL (e.g. after "View all" → /todos, /monitor) */
   useEffect(() => {
     if (pathname === "/") {
       setActiveCategory("work");
@@ -70,6 +71,9 @@ export function DashboardLayout({
     } else if (pathname === "/todos") {
       setActiveCategory("work");
       setActiveLink("todos");
+    } else if (pathname === "/monitor") {
+      setActiveCategory("monitor");
+      setActiveLink(null);
     }
   }, [pathname, setActiveCategory, setActiveLink]);
 
@@ -101,9 +105,13 @@ export function DashboardLayout({
     setActiveCategory(category);
     const links = navigationTree[category as keyof typeof navigationTree];
     if (links?.length) {
-      setActiveLink(links[0].id);
+      const firstLinkId = links[0].id;
+      setActiveLink(firstLinkId);
+      const href = linkIdToPath[firstLinkId];
+      if (href) router.push(href);
     } else {
       setActiveLink(null);
+      if (category === "monitor") router.push("/monitor");
     }
   };
 

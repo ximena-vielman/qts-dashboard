@@ -69,13 +69,15 @@ const MAX_VISIBLE_TASKS = 5;
 
 export interface TaskListProps {
   filter: FilterTab;
+  /** When provided, task items are clickable and this is called with the task id (e.g. to open detail drawer). */
+  onTaskClick?: (taskId: string) => void;
 }
 
 /**
  * TaskList feature component.
  * Renders up to 5 TaskItem components for the To-Do's widget. Toggle lives in card header.
  */
-export function TaskList({ filter }: TaskListProps) {
+export function TaskList({ filter, onTaskClick }: TaskListProps) {
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
 
   const filteredTasks = useMemo(() => {
@@ -114,7 +116,7 @@ export function TaskList({ filter }: TaskListProps) {
           priority={task.priority}
           completed={completedIds.has(task.id)}
           onToggle={handleToggle}
-          onClick={() => {}}
+          onClick={onTaskClick ? () => onTaskClick(task.id) : undefined}
         />
       ))}
     </div>

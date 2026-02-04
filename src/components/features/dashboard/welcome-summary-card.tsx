@@ -4,12 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Info } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
 
 /** Sample data for the welcome summary card */
 const mockData = {
@@ -24,7 +18,6 @@ const mockData = {
     rounds: { value: 2, trend: "up" as const },
     escorts: { value: 3, trend: "up" as const },
   },
-  activityData: [20, 35, 70, 50, 40, 80, 55, 25],
 };
 
 /** Returns greeting based on hour: 5–11:59 Morning, 12–17:59 Afternoon, 18–4:59 Evening */
@@ -34,24 +27,11 @@ function getGreeting(hour: number): string {
   return "Good Evening";
 }
 
-/** Build chart data from activity percentages; labels represent time of day */
-function buildChartData(activityValues: number[]) {
-  const labels = ["5am", "8am", "10am", "12pm", "2pm", "4pm", "6pm", "8pm"];
-  return activityValues.slice(0, 8).map((value, i) => ({
-    time: labels[i] ?? `Point ${i + 1}`,
-    activity: value,
-  }));
-}
-
 export function WelcomeSummaryCard() {
   const [showBanner] = useState(mockData.showScheduleAlert);
   const [currentTime, setCurrentTime] = useState(() => new Date());
 
   const metrics = mockData.metrics;
-  const chartData = useMemo(
-    () => buildChartData(mockData.activityData),
-    []
-  );
 
   const dateHeader = useMemo(
     () => format(currentTime, "EEEE, MMMM d").toUpperCase(),
@@ -162,53 +142,6 @@ export function WelcomeSummaryCard() {
             {metrics.escorts.value}
           </span>
         </div>
-      </div>
-
-      {/* Section 6: Activity sparkline chart */}
-      <div className="h-[120px] min-w-0 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={chartData}
-            margin={{ top: 4, right: 4, left: 4, bottom: 4 }}
-          >
-            <defs>
-              <linearGradient
-                id="activityGradient"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="#99f6e4" stopOpacity={1} />
-                <stop offset="100%" stopColor="#14b8a6" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <Tooltip
-              content={({ active, payload }) =>
-                active && payload?.[0] ? (
-                  <div className="rounded-md border border-border bg-card px-3 py-2 text-sm shadow-md">
-                    <span className="text-muted-foreground">
-                      {payload[0].payload?.time}:{" "}
-                    </span>
-                    <span className="font-medium">
-                      {payload[0].value}% activity
-                    </span>
-                  </div>
-                ) : null
-              }
-              cursor={false}
-            />
-            <Area
-              type="monotone"
-              dataKey="activity"
-              stroke="#14b8a6"
-              strokeWidth={2}
-              fill="url(#activityGradient)"
-              isAnimationActive
-              animationDuration={800}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
       </div>
     </article>
   );

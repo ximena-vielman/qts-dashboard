@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { DashboardLayout } from "@/components/layouts/DashboardLayout/DashboardLayout";
 import { WelcomeSummaryCard } from "@/components/features/dashboard/welcome-summary-card";
@@ -10,6 +10,7 @@ import { EscortsStaysWidget } from "@/components/features/dashboard/escorts-stay
 import { MonitorHealthWidget } from "@/components/features/dashboard/monitor-health-widget";
 import { EquipmentsWidget } from "@/components/features/dashboard/equipments-widget";
 import { TaskList, type FilterTab } from "@/components/features/TaskList/TaskList";
+import { TaskDetailDrawer } from "@/components/features/tasks/task-detail-drawer";
 import {
   Card,
   CardContent,
@@ -24,6 +25,13 @@ import { cn } from "@/lib/utils";
  */
 export default function HomePage() {
   const [todoFilter, setTodoFilter] = useState<FilterTab>("urgent");
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleTaskClick = useCallback((taskId: string) => {
+    setSelectedTaskId(taskId);
+    setIsDrawerOpen(true);
+  }, []);
 
   return (
     <DashboardLayout>
@@ -82,7 +90,10 @@ export default function HomePage() {
               </CardHeader>
                 <CardContent className="flex min-h-0 flex-1 flex-col pt-0">
                   <div className="min-h-0 flex-1">
-                    <TaskList filter={todoFilter} />
+                    <TaskList
+                      filter={todoFilter}
+                      onTaskClick={handleTaskClick}
+                    />
                   </div>
                   <div className="mt-4 shrink-0 border-t border-gray-100 pt-3">
                     <Link
@@ -116,6 +127,12 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+
+      <TaskDetailDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        taskId={selectedTaskId}
+      />
     </DashboardLayout>
   );
 }
