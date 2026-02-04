@@ -35,8 +35,8 @@ export default function HomePage() {
 
   return (
     <DashboardLayout>
-      <main className="min-h-screen bg-gray-50 p-6">
-        <div className="mx-auto max-w-7xl space-y-6">
+      <main className="min-h-0 flex-1 bg-gray-50 p-6">
+        <div className="w-full max-w-full space-y-6">
           {/* Row 1: Welcome card (1/3) + Monitor card (2/3) */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="min-w-0 lg:col-span-1">
